@@ -1,0 +1,107 @@
+<div class="classSection m-0 m-lg-3 mb-0 mb-lg-3">
+
+    <div class="navbar1 py-3">
+        <button class="btn mx-3 navbtn d-flex d-lg-none" (click)="drawer.toggle()" [disabled]="disabled"><span class="material-icons mb-0">menu</span></button>
+        
+        <h5 class="mb-0 ms-1 ms-lg-4 me-auto fw-bold">Classes</h5>
+        <div class="input-group d-none d-lg-flex" style="border-radius: 20px;">
+            <span class="input-group-text searchicon pe-0" id="basic-addon1" style="border-right: 0px;"><span class="material-icons mb-0" style="color: #c2c2c2;">search</span></span>
+            <input class="me-3 py-1 searchinput form-control" style="border-left: 0px;" type="text" placeholder="Search" aria-label="Username" aria-describedby="basic-addon1"/>
+        </div>
+        <button class="btn me-2 pb-0 navbtn" (click)="showDialog()" pTooltip="Create New Class" tooltipPosition="bottom"><span class="material-icons mb-0">add</span></button>
+        <button class="btn me-2 pb-0 navbtn me-3" pTooltip="Notifications" tooltipPosition="bottom" (click)="op.toggle($event)" pBadge value="2" severity="danger"><span class="material-icons mb-0">notifications</span></button>
+        <!-- <button class="btn me-2 pb-0 navbtn"><span class="material-icons mb-0">info</span></button> -->
+    </div>
+
+    <p-overlayPanel #op>
+        <ng-template pTemplate="content"> 
+            <h6 class="text-dark fw-bold mb-3">Notifications</h6>
+            <div class="d-flex justify-content-start align-items-center flex-row notiStyle">
+                <!-- <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle"></p-avatar> -->
+                <p-avatar icon="pi pi-user" styleClass="mr-2" size="large" [style]="{ 'background-color': '#333252', color: '#ffffff' }" shape="circle"></p-avatar>
+                <div class="d-flex justify-content-start align-items-start flex-column ms-2 notiContentStyle">
+                    <p class="text-dark mb-1"><strong>Dr. Saman Hina</strong> Posted a new Announcement</p>
+                </div>
+            </div>
+        </ng-template>
+    </p-overlayPanel>
+
+    <div class="d-flex justify-content-center align-items-center h-100" *ngIf="classList?.length===0; else elseBlock">
+        <div class="container" *ngIf="showSkeleton">
+            <div class="row d-flex justify-content-start align-items-center skeletonStyle">
+                <div class="col-sm-12 col-md-4 my-4" *ngFor="let each of [0,1,2,3,4,5]">
+                    <p-skeleton styleClass="mb-2"></p-skeleton>
+                    <p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>
+                    <p-skeleton width="5rem" styleClass="mb-2"></p-skeleton>
+                    <p-skeleton height="2rem" styleClass="mb-2"></p-skeleton>
+                    <p-skeleton width="10rem" height="4rem"></p-skeleton>
+                </div>
+            </div>
+        </div>
+        <button *ngIf="!showSkeleton" (click)="showDialog()" class="btn d-flex justify-content-center align-items-center flex-column fw-normal fs-3" style="color: #b7b7b7;"><span class="material-icons" style="color: #b7b7b7; font-size: 10rem;">add_circle</span>{{usertype===0?'Join a New Class':'Create a New Class'}}</button>
+    </div>
+
+    <ng-template #elseBlock>
+        <div class="container my-4">
+            <div class="row d-flex justify-content-start align-items-center">
+                <div class="col-sm-12 col-md-4 my-3" *ngFor="let each of classList">
+                    <app-class-item [eachitem]="each" [userType]="usertype"/>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <p-dialog header="Header" [(visible)]="visible" [modal]="true" [dismissableMask]="true" [breakpoints]="{ '960px': '85vw' }" [draggable]="false" [resizable]="false" [style]="{width: '40vw', border:'0px',borderRadius:'50px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}">
+        <ng-template pTemplate="header">
+            <h5 class="white-space-nowrap fw-bold modalheading">Create a New Class</h5>
+        </ng-template>
+
+        <label for="exampleFormControlInput1" class="mb-1 mt-3">Course Name</label>
+        <input type="text" [(ngModel)]="addClass.className" name="name" class="form-control custominput mb-3" id="exampleFormControlInput1" placeholder="Enter Class Name">
+
+        <label for="exampleFormControlInput2" class="mb-1">Course Description</label>
+        <input type="text" [(ngModel)]="addClass.courseName" name="desc" class="form-control custominput mb-3" id="exampleFormControlInput2" placeholder="Enter Description">
+
+        <label for="exampleFormControlInput3" class="mb-1">Course code</label>
+        <input type="text" [(ngModel)]="addClass.courseCode" name="courseCode" class="form-control custominput" id="exampleFormControlInput3" placeholder="Enter Course Code">
+
+        <ng-template pTemplate="footer">
+            <div class="w-100 d-flex justify-content-start align-items-center mt-2">
+                <button class="btn sidenavbtn" (click)="submitForm()"><i class="pi pi-spin pi-spinner me-2 d-none" #spinner style="font-size: 1rem"></i>Add Class</button>
+            </div>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog header="Header" [(visible)]="visible1" [modal]="true" [dismissableMask]="true" [breakpoints]="{ '960px': '85vw' }" [draggable]="false" [resizable]="false" [style]="{width: '30vw', border:'0px',borderRadius:'80px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}">
+        <ng-template pTemplate="header">
+            <h5 class="white-space-nowrap fw-bold modalheading ms-2">Join a New Class</h5>
+        </ng-template>
+
+        <!-- <label for="exampleFormControlInput3" class="mb-1 mt-3">Class code</label> -->
+        <input type="text" [(ngModel)]="joinClass" name="courseCode" class="form-control custominput" id="exampleFormControlInput3" placeholder="Enter Class Code">
+
+        <ng-template pTemplate="footer">
+            <div class="w-100 d-flex justify-content-start align-items-center">
+                <button class="btn sidenavbtn mt-2" (click)="enrollInClass()"><i class="pi pi-spin pi-spinner me-2 d-none" #spinner style="font-size: 1rem"></i>Join Class</button>
+            </div>
+        </ng-template>
+    </p-dialog>
+
+    <p-dialog header="Header" [(visible)]="visible2" [modal]="true" [dismissableMask]="true" [breakpoints]="{ '960px': '85vw' }" [draggable]="false" [resizable]="false" [style]="{width: '30vw', border:'0px',borderRadius:'80px', boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px'}">
+        <ng-template pTemplate="header">
+            <h5 class="white-space-nowrap fw-bold modalheading ms-2">Your class code</h5>
+        </ng-template>
+
+        <div class="d-flex justify-content-center align-items-center flex-row gap-2">
+            <input type="text" readonly [(ngModel)]="classcode" name="courseCode" class="form-control custominput" id="exampleFormControlInput3">
+            <button class="btn btn-outline-dark" (click)="copyCode()"><i class="pi pi-copy"></i></button>
+        </div>
+
+        <!-- <ng-template pTemplate="footer">
+            <div class="w-100 d-flex justify-content-start align-items-center">
+                <button class="btn sidenavbtn" (click)="submitForm()">Join Class</button>
+            </div>
+        </ng-template> -->
+    </p-dialog>
+
+</div>
