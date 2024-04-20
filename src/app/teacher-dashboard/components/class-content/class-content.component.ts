@@ -7,15 +7,12 @@ import { TabMenuModule } from 'primeng/tabmenu';
 import { DrawerService } from '../../../services/drawer-service.service';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { CurrentPathService } from '../../../services/current-path.service';
-import { ClassMaterialComponent } from "../class-material/class-material.component";
-import { ClassStudentsComponent } from "../class-students/class-students.component";
 import { ClassChatComponent } from '../class-chat/class-chat.component';
 import { DialogModule } from 'primeng/dialog';
 import { ScrollTopModule } from 'primeng/scrolltop';
 import { Store } from '@ngrx/store';
 import { Observable, map } from 'rxjs';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ClassService } from '../../../services/class/class.service';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { TooltipModule } from 'primeng/tooltip';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -29,7 +26,7 @@ import { ContentService } from '../../../services/content/content.service';
     standalone: true,
     templateUrl: './class-content.component.html',
     styleUrl: './class-content.component.css',
-    imports: [EditorModule,MenuModule, InputTextareaModule,TabMenuModule, AvatarModule, BadgeModule, NgIf, NgFor, NgClass, ClassMaterialComponent, ClassStudentsComponent, ClassChatComponent,DialogModule,ScrollTopModule, FormsModule,TooltipModule,OverlayPanelModule]
+    imports: [EditorModule,MenuModule, InputTextareaModule,TabMenuModule, AvatarModule, BadgeModule, NgIf, NgFor, NgClass,ClassChatComponent,DialogModule,ScrollTopModule, FormsModule,TooltipModule,OverlayPanelModule]
 })
 export class ClassContentComponent implements OnInit,AfterViewInit {
 
@@ -41,7 +38,6 @@ export class ClassContentComponent implements OnInit,AfterViewInit {
   
   items: MenuItem[] | undefined;
   store = inject(Store)
-  classService = inject(ClassService)
   contentService = inject(ContentService)
   drawer!: MatDrawer;
   disabled:boolean=true;
@@ -133,11 +129,6 @@ export class ClassContentComponent implements OnInit,AfterViewInit {
       this.materialroute = `/v1/dashboard/classes/${this.currentClassId}/materials`
       this.studentsroute = `/v1/dashboard/classes/${this.currentClassId}/students`
       this.chatroute = `/v1/dashboard/classes/${this.currentClassId}/chat`
-    })
-
-    this.classService.GetClassById(this.currentClassId).subscribe((res)=>{
-      console.log(res)
-      this.courseCode = res?.body?.courseCode;
     })
 
   }
