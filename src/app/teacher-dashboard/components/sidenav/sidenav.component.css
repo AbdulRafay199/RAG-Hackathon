@@ -41,7 +41,7 @@
 
 .usernamebtn{
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
     margin-bottom: 0px;
     width: 85%;
